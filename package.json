@@ -1,0 +1,15 @@
+{
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index --inspect"
+  },
+  "dependencies": {
+    "d3-dsv": "^2.0.0",
+    "dotenv": "^16.0.3",
+    "langchain": "^0.0.73"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.3"
+  }
+}
