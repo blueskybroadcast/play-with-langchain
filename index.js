@@ -51,7 +51,7 @@ const handleAsk = async (req, res) => {
   req.on('end', () => {
     const params = JSON.parse(body);
 
-    getSimilarDocuments(params.questions, vectorStore).then((result) => {
+    getSimilarDocuments(params.questions).then((result) => {
       res.statusCode = 200;
       res.setHeader('Content-Type', 'application/json');
       res.end(JSON.stringify({ status: 'success', data: result }));
@@ -85,6 +85,22 @@ const handleSeed = async (req, res) => {
   });
 }
 
+const handleTest = async (req, res) => {
+  let body = '';
+
+  req.on('data', (chunk) => {
+    body += chunk.toString();
+  });
+
+  req.on('end', async () => {
+    const result = await vectorStore.similaritySearch(body, 1);
+
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({ status: 'success', data: result }));
+  });
+}
+
 const server = http.createServer((req, res) => {
   if (req.method === 'POST') {
     switch (req.url) {
@@ -93,6 +109,9 @@ const server = http.createServer((req, res) => {
         break;
       case '/seed':
         handleSeed(req, res);
+        break;
+      case '/test':
+        handleTest(req, res);
         break;
       default:
         res.statusCode = 404;
